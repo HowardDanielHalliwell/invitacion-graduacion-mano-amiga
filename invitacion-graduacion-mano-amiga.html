@@ -973,19 +973,23 @@ window.addEventListener('load', function() {
 </script>
 <script>
 function compartirWhatsApp() {
-  const mensaje = `🎓 *CEREMONIA DE GRADUACIÓN* 🎓
-*XXII Generación de Bachillerato*
-Colegio Mano Amiga Chalco
+  const graduacion = '🎓';
+  const fecha     = '📅';
+  const hora      = '🕙';
+  const pin       = '📍';
+  const mapa      = '🗺';
+  const brillo    = '✨';
 
-📅 *Fecha:* 17 de Julio 2026
-🕙 *Hora:* 9:45 a.m.
-📍 *Lugar:* Auditorio del Colegio
-Av. Cuauhtémoc MZ 1844 - Lote 2
-Col. Concepción, Xico, Méx. 56615
-
-🗺 *Mapa:* https://maps.app.goo.gl/z5i5deGXQhGKLmnG9
-
-✨ *Ver invitación:* https://invitacion-graduacion-mano-amiga.vercel.app`;
+  const mensaje = graduacion + ' *CEREMONIA DE GRADUACIÓN* ' + graduacion + '\n' +
+'*XXII Generación de Bachillerato*\n' +
+'Colegio Mano Amiga Chalco\n\n' +
+fecha  + ' *Fecha:* 17 de Julio 2026\n' +
+hora   + ' *Hora:* 9:45 a.m.\n' +
+pin    + ' *Lugar:* Auditorio del Colegio\n' +
+'Av. Cuauhtémoc MZ 1844 - Lote 2\n' +
+'Col. Concepción, Xico, Méx. 56615\n\n' +
+mapa   + ' *Mapa:* https://maps.app.goo.gl/z5i5deGXQhGKLmnG9\n\n' +
+brillo + ' *Ver invitación:* https://invitacion-graduacion-mano-amiga.vercel.app';
 
   const url = 'https://wa.me/?text=' + encodeURIComponent(mensaje);
   window.open(url, '_blank');
