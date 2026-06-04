@@ -150,6 +150,9 @@
     text-transform: uppercase; text-align: center;
     margin-bottom: 10px;
     animation: fadeUp .8s ease 1.4s both;
+    position: relative;
+    z-index: 10;
+    padding-top: 8px;
   }
 
   .calligraphy-title {
@@ -362,14 +365,17 @@
     margin-top: 14px; text-align: center;
     animation: fadeUp .8s ease 1.9s both;
     display: flex; flex-direction: column; align-items: center; gap: 10px;
+    position: relative; z-index: 10;
   }
   .juntos {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic; font-size: 12px;
     color: var(--azul-medio); letter-spacing: 3px; text-transform: uppercase;
+    position: relative; z-index: 10;
   }
   .btn-whatsapp {
     display: inline-flex; align-items: center; gap: 8px;
+    position: relative; z-index: 10;
     background: #25D366; color: #ffffff;
     font-family: 'Montserrat', sans-serif;
     font-size: 13px; font-weight: 600;
@@ -386,15 +392,16 @@
 
   /* ── Responsive ── */
   @media (max-width: 480px) {
-    .scroll-content { padding: 32px 28px 28px; }
-    .calligraphy-title { font-size: 40px; }
-    .calligraphy-grad  { font-size: 56px; }
+    .scroll-content { padding: 20px 28px 28px; }
+    .calligraphy-title { font-size: 36px; }
+    .calligraphy-grad  { font-size: 50px; }
+    .subtitle-gen { letter-spacing: 2px; font-size: 9px; }
     .school-name { font-size: 20px; }
     .cd-unit { min-width: 44px; padding: 8px 10px; }
     .cd-num  { font-size: 20px; }
     .detail-num { font-size: 26px; }
-    .corner-deco.top-left, .corner-deco.top-right { width: 120px; height: 120px; }
-    .corner-deco.bottom-left, .corner-deco.bottom-right { width: 80px; height: 80px; }
+    .corner-deco.top-left, .corner-deco.top-right { width: 90px; height: 90px; opacity: 0.7; }
+    .corner-deco.bottom-left, .corner-deco.bottom-right { width: 70px; height: 70px; opacity: 0.6; }
     .event-details { flex-direction: column; }
     .detail-divider-v { width: auto; height: 1px; margin: 0 12px;
       background: linear-gradient(90deg, transparent, rgba(201,168,76,.5), transparent);
@@ -758,7 +765,7 @@
           <span class="detail-label">Fecha</span>
           <span class="detail-num">17</span>
           <span class="detail-month">Julio</span>
-          <span class="detail-year">2025</span>
+          <span class="detail-year">2026</span>
         </div>
         <div class="detail-divider-v"></div>
         <div class="detail-cell">
