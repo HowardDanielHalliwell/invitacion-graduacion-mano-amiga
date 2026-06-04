@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XXII Generación · Mano Amiga Chalco</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,600&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0A1628;--azul:#1B3A6B;--azul-m:#2C5F9E;--azul-c:#5B8EC4;
+  --naranja:#F5820A;--oro:#C9A84C;--oro-c:#E8C97A;--oro-b:#F5E8A0;
+  --crema:#FDF4E3;--crema-d:#F5E6C8;--texto:#2A1A08
+}
+html{scroll-behavior:smooth}
+body{min-height:100vh;background:var(--bg);overflow-x:hidden;font-family:'Montserrat',sans-serif}
+
+/* ── CANVASES ── */
+#cv-bg,#cv-confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+#cv-bg{z-index:0}
+#cv-confetti{z-index:200}
+
+/* ── BOKEH ── */
+.bokeh-wrap{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+.bokeh{position:absolute;border-radius:50%;
+  background:radial-gradient(circle,rgba(201,168,76,.2) 0%,transparent 70%);
+  filter:blur(28px);
+  animation:bokehDrift var(--d,12s) ease-in-out infinite alternate}
+@keyframes bokehDrift{
+  0%{transform:translate(0,0) scale(1)}
+  100%{transform:translate(var(--tx,30px),var(--ty,-20px)) scale(1.2)}
+}
+
+/* ── INTRO ── */
+#intro{
+  position:fixed;inset:0;background:#000;z-index:500;
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .8s ease
+}
+#intro.out{opacity:0;pointer-events:none}
+#cv-intro{position:absolute;inset:0;width:100%;height:100%}
+#intro-inner{
+  position:relative;z-index:10;
+  display:flex;flex-direction:column;align-items:center;gap:28px
+}
+#intro-logo-wrap{position:relative;display:flex;align-items:center;justify-content:center}
+#intro-glow{
+  position:absolute;inset:-50px;border-radius:50%;
+  background:radial-gradient(circle,rgba(201,168,76,.22) 0%,transparent 65%);
+  opacity:0;transition:opacity 1s ease;pointer-events:none
+}
+#intro-glow.show{opacity:1}
+#intro-logo{
+  width:clamp(100px,18vw,150px);height:auto;
+  opacity:0;transform:scale(.5);
+  transition:opacity .9s ease,transform .9s cubic-bezier(.175,.885,.32,1.3);
+  filter:drop-shadow(0 0 28px rgba(201,168,76,.55)) drop-shadow(0 0 56px rgba(201,168,76,.25))
+}
+#intro-logo.show{opacity:1;transform:scale(1)}
+#intro-sub{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(15px,3.5vw,24px);
+  font-weight:400;color:var(--oro-c);
+  letter-spacing:7px;text-transform:uppercase;text-align:center;
+  min-height:1.6em;
+  text-shadow:0 0 20px rgba(201,168,76,.8)
+}
+#intro-sub .cursor{
+  display:inline-block;width:2px;height:.9em;
+  background:var(--oro);vertical-align:middle;margin-left:2px;
+  animation:blinkI .65s infinite
+}
+@keyframes blinkI{0%,100%{opacity:1}50%{opacity:0}}
+
+/* Encabezado apertura — "XXII GENERACIÓN DE BACHILLERATO" */
+#intro-heading{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(15px,2.8vw,22px);font-weight:400;
+  color:#E8C97A;letter-spacing:4px;text-transform:uppercase;
+  text-align:center;min-height:1.4em;order:-1;
+  text-shadow:0 0 20px rgba(201,168,76,.8)
+}
+#intro-heading .cursor{
+  display:inline-block;width:2px;height:.85em;
+  background:#E8C97A;vertical-align:middle;margin-left:2px;
+  animation:blinkI .65s infinite
+}
+
+/* ── MAIN ── */
+#main{
+  position:relative;z-index:10;
+  min-height:100vh;
+  display:flex;align-items:flex-start;justify-content:center;
+  padding:40px 16px 60px;
+  opacity:0;transition:opacity .8s ease
+}
+#main.show{opacity:1}
+.page-wrap{width:100%;max-width:680px}
+
+/* ── SCROLL WRAPPER ── */
+.scroll-wrap{
+  position:relative;
+  filter:drop-shadow(0 40px 80px rgba(0,0,0,.65))
+}
+
+/* Shimmer frame around body */
+.scroll-frame{
+  border-radius:26px;padding:2px;
+  background:linear-gradient(90deg,var(--oro) 0%,var(--oro-c) 20%,var(--oro-b) 40%,var(--oro-c) 60%,var(--oro) 80%,var(--oro-c) 100%);
+  background-size:300% 100%;
+  animation:shimmer 3s linear infinite;
+  position:relative;z-index:1
+}
+@keyframes shimmer{0%{background-position:0 50%}100%{background-position:300% 50%}}
+
+/* ── RODS ── */
+.rod{
+  position:relative;height:38px;
+  background:linear-gradient(180deg,
+    #F8EFA0 0%,#F5E099 8%,#E8C97A 20%,#C9A84C 38%,
+    #8A6520 52%,#C9A84C 68%,#E8C97A 82%,#F5E099 92%,#F8EFA0 100%);
+  box-shadow:0 6px 24px rgba(0,0,0,.55),
+    inset 0 1px 2px rgba(255,255,255,.45),
+    inset 0 -1px 2px rgba(0,0,0,.3);
+  z-index:3;overflow:visible
+}
+.rod::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(90deg,transparent 0,transparent 12px,rgba(0,0,0,.06) 12px,rgba(0,0,0,.06) 14px)
+}
+.rod-top{border-radius:6px 6px 0 0}
+.rod-top::after{
+  content:'';position:absolute;bottom:-10px;left:14px;right:14px;height:12px;
+  background:linear-gradient(180deg,rgba(0,0,0,.2),transparent);
+  border-radius:0 0 50% 50%
+}
+.rod-bot{border-radius:0 0 6px 6px}
+.rod-bot::after{
+  content:'';position:absolute;top:-10px;left:14px;right:14px;height:12px;
+  background:linear-gradient(0deg,rgba(0,0,0,.2),transparent);
+  border-radius:50% 50% 0 0
+}
+.rod-cap{
+  position:absolute;top:-5px;bottom:-5px;width:38px;
+  background:linear-gradient(180deg,#F8EFA0,#E8C97A,#C9A84C,#8A6520,#C9A84C,#E8C97A,#F8EFA0);
+  border-radius:50%;
+  box-shadow:0 4px 14px rgba(0,0,0,.5),inset 0 1px 3px rgba(255,255,255,.45)
+}
+.rod-cap::after{
+  content:'';position:absolute;inset:8px;
+  background:radial-gradient(circle at 38% 32%,#F8EFA0,#9A7A2C);
+  border-radius:50%
+}
+.rod-cap.l{left:-14px}
+.rod-cap.r{right:-14px}
+
+/* ── SCROLL BODY ── */
+.scroll-body{
+  background:#FFFFFF;
+  border-radius:22px;position:relative;overflow:hidden;
+  max-height:0;
+  transition:max-height 1.3s cubic-bezier(.16,1,.3,1)
+}
+.scroll-body.open{max-height:2600px}
+
+/* Mármol SVG + viñetas doradas sutiles */
+.scroll-body::before{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.015' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0.04'/%3E%3C/feComponentTransfer%3E%3CfeBlend in='SourceGraphic' mode='multiply'/%3E%3C/filter%3E%3Crect width='600' height='600' filter='url(%23m)'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse at 8% 8%,rgba(201,168,76,.07) 0%,transparent 45%),
+    radial-gradient(ellipse at 92% 92%,rgba(201,168,76,.07) 0%,transparent 45%),
+    radial-gradient(ellipse at 8% 92%,rgba(201,168,76,.04) 0%,transparent 40%),
+    radial-gradient(ellipse at 92% 8%,rgba(201,168,76,.04) 0%,transparent 40%)
+}
+/* Side depth shadows */
+.scroll-body::after{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:linear-gradient(90deg,
+    rgba(100,75,20,.16) 0%,rgba(160,120,50,.07) 6%,
+    transparent 16%,transparent 84%,
+    rgba(160,120,50,.07) 94%,rgba(100,75,20,.16) 100%)
+}
+
+/* ── ORNAMENTAL FRAME ── */
+.orn-frame{
+  position:absolute;inset:14px;border-radius:12px;
+  border:1px solid rgba(201,168,76,.38);
+  pointer-events:none;z-index:1
+}
+.orn-frame::before{
+  content:'';position:absolute;inset:5px;border-radius:8px;
+  border:.5px solid rgba(201,168,76,.2)
+}
+.corner{position:absolute;width:28px;height:28px;border-style:solid;border-color:var(--oro);border-width:0;z-index:2}
+.corner.tl{top:18px;left:18px;border-top-width:2px;border-left-width:2px}
+.corner.tr{top:18px;right:18px;border-top-width:2px;border-right-width:2px}
+.corner.bl{bottom:18px;left:18px;border-bottom-width:2px;border-left-width:2px}
+.corner.br{bottom:18px;right:18px;border-bottom-width:2px;border-right-width:2px}
+
+/* ── SCROLL CONTENT ── */
+.scroll-cnt{
+  position:relative;z-index:2;
+  padding:52px 60px;
+  display:flex;flex-direction:column;align-items:center
+}
+
+/* ── REVEAL HELPERS ── */
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .65s ease,transform .65s ease}
+.reveal.show{opacity:1;transform:translateY(0)}
+.reveal-x{opacity:0;transform:translateX(-28px);transition:opacity .65s ease,transform .65s ease}
+.reveal-x.show{opacity:1;transform:translateX(0)}
+
+/* ── LOGO PRINCIPAL ── */
+.main-logo{width:130px;height:auto;display:block;
+  filter:drop-shadow(0 4px 14px rgba(27,58,107,.3))}
+
+/* ── SEPARADORES ── */
+.sep{width:100%;display:flex;align-items:center;gap:10px;margin:14px 0}
+
+/* SVG draw */
+.sep-draw svg{width:100%;overflow:visible}
+.dl{stroke:var(--oro);stroke-width:1;fill:none;
+  stroke-dasharray:1;stroke-dashoffset:1;
+  transition:stroke-dashoffset 1s ease var(--delay,0s)}
+.sep-draw.go .dl{stroke-dashoffset:0}
+.dp{opacity:0;transition:opacity .3s ease var(--delay,0s)}
+.sep-draw.go .dp{opacity:1}
+
+/* Expanding sep */
+.sep-exp .sl{
+  flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,var(--oro),transparent);
+  transform:scaleX(0);transform-origin:center;
+  transition:transform .8s ease
+}
+.sep-exp.go .sl{transform:scaleX(1)}
+.sep-exp .sc{
+  font-size:12px;color:var(--oro);flex-shrink:0;
+  opacity:0;transition:opacity .4s ease .5s
+}
+.sep-exp.go .sc{opacity:1}
+
+/* ── TEXTOS ── */
+.inv-label{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(14px,3vw,18px);font-weight:300;
+  color:var(--azul-m);letter-spacing:1px;text-align:center;
+  margin-bottom:8px
+}
+.title-wrap{text-align:center;margin-bottom:6px}
+.t1{font-family:'Playfair Display',serif;font-size:clamp(28px,7vw,46px);
+  font-weight:900;line-height:1.05;letter-spacing:2px;text-transform:uppercase;
+  color:#0D1F3C}
+.t2{font-family:'Playfair Display',serif;font-size:clamp(28px,7vw,46px);
+  font-weight:900;line-height:1.05;letter-spacing:2px;text-transform:uppercase;
+  color:var(--naranja);margin-top:2px}
+.letter{
+  display:inline-block;opacity:0;transform:translateY(-30px);
+  animation:lFall .5s ease forwards
+}
+@keyframes lFall{to{opacity:1;transform:translateY(0)}}
+.sub-gen{
+  font-family:'Montserrat',sans-serif;font-size:clamp(10px,2vw,13px);
+  font-weight:500;color:var(--azul-c);letter-spacing:5px;
+  text-transform:uppercase;text-align:center;margin-top:6px
+}
+
+/* ── FRASE HKN ── */
+.quote-blk{
+  background:linear-gradient(135deg,#0D1F3C 0%,#1B3A6B 100%);
+  border-left:4px solid #C9A84C;
+  border-top:1px solid rgba(201,168,76,.4);
+  border-bottom:1px solid rgba(201,168,76,.4);
+  padding:28px 32px;margin:6px 0;width:100%;
+  position:relative;min-height:90px
+}
+.quote-blk::before{
+  content:'\201C';font-family:'Playfair Display',serif;
+  font-size:80px;color:#C9A84C;opacity:.15;
+  position:absolute;top:-4px;left:10px;line-height:1;
+  pointer-events:none
+}
+.q-text{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(20px,3vw,26px);font-weight:400;
+  color:#FDF4E3;line-height:1.6;text-align:center
+}
+.q-cursor{
+  display:inline-block;width:2px;height:1em;
+  background:var(--oro-c);vertical-align:middle;margin-left:1px;
+  animation:blinkI .65s infinite
+}
+.q-attr{
+  font-family:'Montserrat',sans-serif;font-size:10px;font-weight:400;
+  color:#E8C97A;text-align:right;margin-top:12px;
+  letter-spacing:4px;text-transform:uppercase
+}
+
+/* ── EVENT GRID ── */
+.ev-grid{
+  width:100%;display:grid;grid-template-columns:1fr 1fr 1fr;
+  gap:1px;background:rgba(201,168,76,.28);
+  border:1px solid rgba(201,168,76,.28);margin:6px 0
+}
+.ev-cell{
+  background:#F8F8F8;padding:18px 10px;text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  opacity:0;transform:perspective(600px) rotateY(-90deg);
+  transition:opacity .55s ease,transform .55s ease
+}
+.ev-cell.show{opacity:1;transform:perspective(600px) rotateY(0)}
+.ev-icon{font-size:22px;line-height:1}
+.ev-lbl{font-family:'Montserrat',sans-serif;font-size:8px;font-weight:600;
+  letter-spacing:3px;text-transform:uppercase;color:var(--azul-c)}
+.ev-val{font-family:'Playfair Display',serif;
+  font-size:clamp(11px,2.2vw,13px);font-weight:700;color:#0D1F3C;line-height:1.3}
+.ev-val span{display:block;font-family:'Montserrat',sans-serif;
+  font-size:9px;font-weight:300;color:#3A3A3A;margin-top:1px}
+
+/* ── FLIP CLOCK ── */
+.cd-section{width:100%;margin:8px 0}
+.cd-lbl-top{font-family:'Montserrat',sans-serif;font-size:8px;font-weight:600;
+  letter-spacing:5px;text-transform:uppercase;color:var(--azul-c);
+  text-align:center;margin-bottom:12px}
+.cd-row{display:flex;justify-content:center;align-items:flex-start;gap:8px}
+.flip-unit{display:flex;flex-direction:column;align-items:center;gap:5px}
+.flip-card{
+  position:relative;width:62px;height:72px;
+  background:linear-gradient(180deg,var(--azul) 0%,#0A1628 100%);
+  border:1px solid rgba(201,168,76,.2);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden
+}
+/* Center dividing line */
+.flip-card::after{
+  content:'';position:absolute;left:0;right:0;top:50%;
+  height:1px;background:rgba(0,0,0,.5);z-index:5
+}
+.flip-num{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(24px,5vw,32px);font-weight:700;
+  color:var(--oro-c);text-shadow:0 2px 10px rgba(201,168,76,.4);
+  user-select:none;line-height:1
+}
+/* Sheen overlay on card */
+.flip-card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(255,255,255,.06) 0%,transparent 50%,rgba(0,0,0,.1) 100%);
+  pointer-events:none;z-index:2
+}
+.flip-card.flip .flip-num{animation:flipN .38s ease forwards}
+@keyframes flipN{
+  0%{transform:rotateX(0);opacity:1}
+  48%{transform:rotateX(-88deg);opacity:0}
+  52%{transform:rotateX(88deg);opacity:0}
+  100%{transform:rotateX(0);opacity:1}
+}
+.flip-lbl{font-family:'Montserrat',sans-serif;font-size:7.5px;font-weight:400;
+  letter-spacing:2.5px;color:var(--azul-c);text-transform:uppercase}
+.flip-sep{font-family:'Playfair Display',serif;font-size:28px;
+  color:var(--oro);align-self:flex-start;padding-top:18px;line-height:1}
+
+/* ── FIRMA ── */
+.sig-blk{text-align:center;margin-top:10px}
+.sig-line{width:180px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--oro),transparent);
+  margin:0 auto 10px}
+.sig-name{font-family:'Playfair Display',serif;
+  font-size:clamp(12px,2.5vw,14px);font-weight:700;color:var(--azul)}
+.sig-role{font-family:'Montserrat',sans-serif;font-size:9px;font-weight:400;
+  color:var(--azul-c);letter-spacing:3px;text-transform:uppercase;margin-top:3px}
+
+/* ── BACH LOGO (ESTAMPA) ── */
+.bach-wrap{
+  margin:14px 0 6px;
+  opacity:0;transform:scale(1.9) rotate(-7deg);
+  transition:opacity .5s ease,transform .55s cubic-bezier(.175,.885,.32,1.6)
+}
+.bach-wrap.show{opacity:1;transform:scale(1) rotate(0)}
+.bach-img{width:130px;height:auto;display:block;margin:0 auto}
+
+/* ── FOOTER ── */
+.scroll-footer{margin-top:12px;text-align:center;width:100%}
+.juntos{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:clamp(12px,2.5vw,14px);color:var(--azul-m);
+  letter-spacing:3px;text-transform:uppercase;margin-bottom:16px}
+.btn-wa{
+  display:inline-flex;align-items:center;gap:10px;
+  background:#25D366;color:#fff;text-decoration:none;
+  font-family:'Montserrat',sans-serif;font-size:13px;
+  font-weight:600;letter-spacing:.5px;
+  padding:13px 26px;border-radius:50px;
+  box-shadow:0 6px 20px rgba(37,211,102,.35);
+  transition:transform .2s,box-shadow .2s,background .2s
+}
+.btn-wa:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(37,211,102,.45);background:#20c05a}
+.btn-wa svg{width:20px;height:20px;fill:#fff;flex-shrink:0}
+
+/* ── RESPONSIVE ── */
+@media(max-width:520px){
+  .scroll-cnt{padding:38px 28px}
+  .ev-grid{grid-template-columns:1fr 1fr}
+  .ev-cell:last-child{grid-column:1/-1}
+  .cd-row{gap:5px}
+  .flip-card{width:52px;height:60px}
+  .rod-cap{width:28px}
+  .rod-cap.l{left:-10px}
+  .rod-cap.r{right:-10px}
+}
+@media(max-width:380px){
+  .scroll-cnt{padding:28px 18px}
+  .ev-grid{grid-template-columns:1fr}
+  .ev-cell:last-child{grid-column:auto}
+}
+</style>
+</head>
+<body>
+
+<canvas id="cv-bg"></canvas>
+<canvas id="cv-confetti"></canvas>
+<div class="bokeh-wrap" id="bokeh-wrap"></div>
+
+<!-- ══ INTRO ══════════════════════════════════ -->
+<div id="intro">
+  <canvas id="cv-intro"></canvas>
+  <div id="intro-inner">
+    <div id="intro-heading"><span class="cursor"></span></div>
+    <div id="intro-logo-wrap">
+      <div id="intro-glow"></div>
+      <img id="intro-logo" src="data:image/png;base64,LOGO_PLACEHOLDER" alt="Mano Amiga">
+    </div>
+    <div id="intro-sub"><span class="cursor"></span></div>
+  </div>
+</div>
+
+<!-- ══ MAIN ═══════════════════════════════════ -->
+<div id="main">
+<div class="page-wrap">
+<div class="scroll-wrap">
+
+  <div class="rod rod-top">
+    <div class="rod-cap l"></div><div class="rod-cap r"></div>
+  </div>
+
+  <div class="scroll-frame">
+    <div class="scroll-body" id="scroll-body">
+      <div class="orn-frame"></div>
+      <div class="corner tl"></div><div class="corner tr"></div>
+      <div class="corner bl"></div><div class="corner br"></div>
+
+      <div class="scroll-cnt">
+
+        <!-- Logo -->
+        <div class="reveal" id="s-logo" style="margin-bottom:10px">
+          <img src="data:image/png;base64,LOGO_PLACEHOLDER" alt="Colegio Mano Amiga Chalco" class="main-logo">
+        </div>
+
+        <!-- Sep 1 — dibujada -->
+        <div class="sep sep-draw" id="sep1" style="margin:12px 0">
+          <svg height="20" viewBox="0 0 400 20" preserveAspectRatio="none">
+            <line x1="0" y1="10" x2="172" y2="10" class="dl" pathLength="1" style="--delay:.05s"/>
+            <polygon points="182,5 200,10 182,15" class="dp" style="fill:var(--oro);--delay:.55s"/>
+            <circle cx="200" cy="10" r="3.5" class="dp" style="fill:var(--oro);--delay:.7s"/>
+            <polygon points="218,15 200,10 218,5" class="dp" style="fill:var(--oro);--delay:.85s"/>
+            <line x1="228" y1="10" x2="400" y2="10" class="dl" pathLength="1" style="--delay:.65s"/>
+          </svg>
+        </div>
+
+        <!-- Texto introductorio -->
+        <p class="inv-label reveal" id="s-invite">Con gran orgullo te invitamos a la</p>
+
+        <!-- Títulos con letras -->
+        <div class="title-wrap">
+          <div class="t1" id="t1">CEREMONIA DE</div>
+          <div class="t2" id="t2">GRADUACIÓN</div>
+        </div>
+
+        <!-- Subtítulo -->
+        <p class="sub-gen reveal-x" id="s-sub" style="margin-bottom:4px">XXII Generación de Bachillerato</p>
+
+        <!-- Sep 2 — expansión -->
+        <div class="sep sep-exp" id="sep2">
+          <div class="sl"></div>
+          <div class="sc">✦ ✦ ✦</div>
+          <div class="sl"></div>
+        </div>
+
+        <!-- Frase HKN -->
+        <div class="quote-blk reveal" id="s-quote">
+          <p class="q-text" id="q-text"><span class="q-cursor" id="q-cur"></span></p>
+          <p class="q-attr reveal" id="q-attr">— H.K.N.</p>
+        </div>
+
+        <!-- Datos del evento -->
+        <div class="ev-grid" style="margin-top:6px">
+          <div class="ev-cell" id="ec1">
+            <div class="ev-icon">📅</div>
+            <div class="ev-lbl">Fecha</div>
+            <div class="ev-val">17 de Julio<span>2025</span></div>
+          </div>
+          <div class="ev-cell" id="ec2">
+            <div class="ev-icon">🕘</div>
+            <div class="ev-lbl">Hora de cita</div>
+            <div class="ev-val">9:45 a.m.</div>
+          </div>
+          <div class="ev-cell" id="ec3">
+            <div class="ev-icon">🏛️</div>
+            <div class="ev-lbl">Lugar</div>
+            <div class="ev-val">Auditorio<span>Colegio Mano Amiga Chalco</span></div>
+          </div>
+        </div>
+
+        <!-- Cuenta regresiva flip -->
+        <div class="cd-section reveal" id="s-cd">
+          <p class="cd-lbl-top">Faltan</p>
+          <div class="cd-row">
+            <div class="flip-unit">
+              <div class="flip-card" id="fd"><div class="flip-num">--</div></div>
+              <div class="flip-lbl">Días</div>
+            </div>
+            <div class="flip-sep">:</div>
+            <div class="flip-unit">
+              <div class="flip-card" id="fh"><div class="flip-num">--</div></div>
+              <div class="flip-lbl">Horas</div>
+            </div>
+            <div class="flip-sep">:</div>
+            <div class="flip-unit">
+              <div class="flip-card" id="fm"><div class="flip-num">--</div></div>
+              <div class="flip-lbl">Min</div>
+            </div>
+            <div class="flip-sep">:</div>
+            <div class="flip-unit">
+              <div class="flip-card" id="fs"><div class="flip-num">--</div></div>
+              <div class="flip-lbl">Seg</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Firma -->
+        <div class="sig-blk reveal" id="s-sig" style="margin-top:10px">
+          <div class="sig-line"></div>
+          <div class="sig-name">Lic. José Manuel Fierro P.</div>
+          <div class="sig-role">Director · Colegio Mano Amiga Chalco</div>
+        </div>
+
+        <!-- Logo Bachillerato -->
+        <div class="bach-wrap" id="s-bach">
+          <img src="data:image/png;base64,BACH_PLACEHOLDER" alt="Bachillerato" class="bach-img">
+        </div>
+
+        <!-- Footer -->
+        <div class="scroll-footer reveal" id="s-foot">
+          <div class="sep sep-exp" id="sep3" style="margin-bottom:14px">
+            <div class="sl"></div><div class="sc">✦</div><div class="sl"></div>
+          </div>
+          <p class="juntos">Juntos Transformando Vidas</p>
+          <a href="#" class="btn-wa" id="btn-wa">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Compartir por WhatsApp
+          </a>
+        </div>
+
+      </div><!-- /scroll-cnt -->
+    </div><!-- /scroll-body -->
+  </div><!-- /scroll-frame -->
+
+  <div class="rod rod-bot">
+    <div class="rod-cap l"></div><div class="rod-cap r"></div>
+  </div>
+
+</div><!-- /scroll-wrap -->
+</div><!-- /page-wrap -->
+</div><!-- /main -->
+
+<script>
+// ════════════════════════════════
+// BG PARTICLES + GRADIENT
+// ════════════════════════════════
+!function(){
+  var c=document.getElementById('cv-bg'),x=c.getContext('2d'),P=[];
+  function rs(){c.width=innerWidth;c.height=innerHeight}
+  rs();addEventListener('resize',rs);
+  for(var i=0;i<60;i++)P.push({
+    x:Math.random()*innerWidth,y:Math.random()*innerHeight,
+    r:.8+Math.random()*1.8,op:.15+Math.random()*.5,
+    vx:(Math.random()-.5)*.22,vy:-.1-Math.random()*.2,
+    t:Math.random()*Math.PI*2
+  });
+  function draw(){
+    var g=x.createRadialGradient(c.width/2,c.height*.38,0,c.width/2,c.height*.38,Math.max(c.width,c.height)*.85);
+    g.addColorStop(0,'#1B3A6B');g.addColorStop(1,'#0A1628');
+    x.fillStyle=g;x.fillRect(0,0,c.width,c.height);
+    for(var i=0;i<P.length;i++){
+      var p=P[i];p.t+=.008;
+      p.x+=p.vx+Math.sin(p.t*.7)*.15;p.y+=p.vy+Math.cos(p.t*.5)*.1;
+      if(p.y<-4)p.y=c.height+4;
+      if(p.x<-4)p.x=c.width+4;
+      if(p.x>c.width+4)p.x=-4;
+      x.beginPath();x.arc(p.x,p.y,p.r,0,Math.PI*2);
+      x.fillStyle='rgba(201,168,76,'+p.op+')';x.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+}();
+
+// ════════════════════════════════
+// BOKEH
+// ════════════════════════════════
+!function(){
+  var w=document.getElementById('bokeh-wrap');
+  for(var i=0;i<9;i++){
+    var el=document.createElement('div');el.className='bokeh';
+    var s=70+Math.random()*160;
+    el.style.cssText='width:'+s+'px;height:'+s+'px;left:'+(Math.random()*90)+'%;top:'+(Math.random()*90)+'%;--d:'+(8+Math.random()*14)+'s;--tx:'+((Math.random()-.5)*90)+'px;--ty:'+((Math.random()-.5)*65)+'px';
+    w.appendChild(el);
+  }
+}();
+
+// ════════════════════════════════
+// INTRO PARTICLES
+// ════════════════════════════════
+var _stopIntro=false;
+!function(){
+  var c=document.getElementById('cv-intro'),x=c.getContext('2d'),P=[];
+  function rs(){c.width=innerWidth;c.height=innerHeight}
+  rs();addEventListener('resize',rs);
+  for(var i=0;i<90;i++)P.push({
+    x:Math.random()*innerWidth,y:Math.random()*innerHeight,
+    r:.6+Math.random()*1.6,op:.1+Math.random()*.5,
+    vx:(Math.random()-.5)*.3,vy:-.15-Math.random()*.25,
+    t:Math.random()*Math.PI*2
+  });
+  function draw(){
+    if(_stopIntro)return;
+    x.clearRect(0,0,c.width,c.height);
+    for(var i=0;i<P.length;i++){
+      var p=P[i];p.t+=.01;
+      p.x+=p.vx+Math.sin(p.t)*.18;p.y+=p.vy;
+      if(p.y<-4){p.y=c.height+4;p.x=Math.random()*c.width;}
+      if(p.x<-4)p.x=c.width+4;if(p.x>c.width+4)p.x=-4;
+      x.beginPath();x.arc(p.x,p.y,p.r,0,Math.PI*2);
+      x.fillStyle='rgba(201,168,76,'+p.op+')';x.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+}();
+
+// ════════════════════════════════
+// TYPEWRITER
+// ════════════════════════════════
+function typewrite(el,text,ms,done){
+  var cur=document.getElementById('q-cur');
+  var i=0;
+  var t=setInterval(function(){
+    var s=document.createTextNode(text[i]);
+    if(cur)el.insertBefore(s,cur);else el.appendChild(s);
+    i++;
+    if(i>=text.length){
+      clearInterval(t);
+      if(cur)setTimeout(function(){cur.style.display='none';},900);
+      if(done)done();
+    }
+  },ms);
+}
+
+// ════════════════════════════════
+// LETTER ANIMATION
+// ════════════════════════════════
+function animLetters(el,baseMs){
+  var txt=el.textContent;el.innerHTML='';
+  txt.split('').forEach(function(ch,i){
+    var s=document.createElement('span');
+    s.className='letter';
+    s.style.animationDelay=(baseMs+i*52)+'ms';
+    s.textContent=ch===' '?' ':ch;
+    el.appendChild(s);
+  });
+}
+
+// ════════════════════════════════
+// FLIP CLOCK
+// ════════════════════════════════
+var _fvals={d:'',h:'',m:'',s:''};
+function setFlip(id,key,val){
+  var fmt=String(Math.max(0,val)).padStart(2,'0');
+  if(_fvals[key]===fmt)return;
+  _fvals[key]=fmt;
+  var card=document.getElementById(id);
+  var num=card.querySelector('.flip-num');
+  card.classList.remove('flip');void card.offsetWidth;
+  num.textContent=fmt;
+  card.classList.add('flip');
+}
+function tickCD(){
+  var t=new Date('2025-07-17T09:45:00')-new Date();
+  if(t<=0){setFlip('fd','d',0);setFlip('fh','h',0);setFlip('fm','m',0);setFlip('fs','s',0);return;}
+  setFlip('fd','d',Math.floor(t/86400000));
+  setFlip('fh','h',Math.floor(t%86400000/3600000));
+  setFlip('fm','m',Math.floor(t%3600000/60000));
+  setFlip('fs','s',Math.floor(t%60000/1000));
+}
+
+// ════════════════════════════════
+// CONFETTI
+// ════════════════════════════════
+function confetti(){
+  var c=document.getElementById('cv-confetti'),x=c.getContext('2d');
+  c.width=innerWidth;c.height=innerHeight;
+  var CL=['#1B3A6B','#5B8EC4','#F5820A','#C9A84C','#E8C97A','#FDF4E3'],P=[],fr=0;
+  for(var i=0;i<180;i++)P.push({
+    x:Math.random()*c.width,y:-20-Math.random()*120,
+    w:5+Math.random()*9,h:3+Math.random()*5,
+    col:CL[~~(Math.random()*CL.length)],
+    rot:Math.random()*Math.PI*2,
+    vx:(Math.random()-.5)*3.5,vy:2.5+Math.random()*4,
+    rv:(Math.random()-.5)*.22,op:1,circ:Math.random()>.5
+  });
+  function dr(){
+    x.clearRect(0,0,c.width,c.height);fr++;
+    for(var i=0;i<P.length;i++){
+      var p=P[i];p.x+=p.vx;p.y+=p.vy;p.rot+=p.rv;
+      if(fr>160)p.op=Math.max(0,p.op-.013);
+      x.save();x.globalAlpha=p.op;x.translate(p.x,p.y);x.rotate(p.rot);
+      x.fillStyle=p.col;
+      if(p.circ){x.beginPath();x.arc(0,0,p.w/2,0,Math.PI*2);x.fill();}
+      else x.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      x.restore();
+    }
+    if(fr<230)requestAnimationFrame(dr);
+    else x.clearRect(0,0,c.width,c.height);
+  }
+  dr();
+}
+
+// ════════════════════════════════
+// SHOW ELEMENT HELPERS
+// ════════════════════════════════
+function show(id){var e=document.getElementById(id);if(e)e.classList.add('show');}
+function go(id){var e=document.getElementById(id);if(e)e.classList.add('go');}
+function delay(fn,ms){setTimeout(fn,ms);}
+
+// ════════════════════════════════
+// MAIN CONTENT SEQUENCE
+// ════════════════════════════════
+function startMain(){
+  show('main');
+  delay(function(){document.getElementById('scroll-body').classList.add('open');},60);
+
+  var T=250;// base offset after scroll starts
+  delay(function(){show('s-logo');},T+100);
+  delay(function(){go('sep1');},T+400);
+  delay(function(){show('s-invite');},T+700);
+  delay(function(){animLetters(document.getElementById('t1'),0);},T+1000);
+  delay(function(){animLetters(document.getElementById('t2'),0);},T+1280);
+  delay(function(){show('s-sub');},T+1550);
+  delay(function(){go('sep2');},T+1750);
+
+  // Quote: show block then typewrite
+  delay(function(){
+    show('s-quote');
+    delay(function(){
+      typewrite(document.getElementById('q-text'),
+        'No hay excusa alguna para no servir a los demás',52,
+        function(){show('q-attr');}
+      );
+    },350);
+  },T+1950);
+
+  // Event cells flip-in
+  delay(function(){show('ec1');},T+3600);
+  delay(function(){show('ec2');},T+3800);
+  delay(function(){show('ec3');},T+4000);
+
+  // Countdown
+  delay(function(){show('s-cd');tickCD();setInterval(tickCD,1000);},T+4200);
+
+  // Signature + bach + footer
+  delay(function(){show('s-sig');},T+4600);
+  delay(function(){show('s-bach');},T+5000);
+  delay(function(){show('s-foot');go('sep3');},T+5400);
+
+  // Confetti when scroll opens
+  delay(confetti,T+1350);
+}
+
+// ════════════════════════════════
+// INTRO SEQUENCE  (3 fases)
+// ════════════════════════════════
+function runIntro(){
+  var HDG_TXT='XXII GENERACIÓN DE BACHILLERATO';
+  var HDG_MS=55;
+  var SUB_TXT='Colegio Mano Amiga Chalco';
+  var SUB_MS=70;
+
+  var hdgStart=180;
+  var hdgDone=hdgStart+HDG_TXT.length*HDG_MS;   // ~1885ms
+  var logoShow=hdgDone+280;                       // ~2165ms
+  var subStart=logoShow+950;                      // ~3115ms  (logo tarda 0.9s)
+  var subDone=subStart+SUB_TXT.length*SUB_MS;    // ~4865ms
+  var fadeAt=subDone+900;                         // ~5765ms
+
+  // Fase 1: typewriter del encabezado
+  var hdgEl=document.getElementById('intro-heading');
+  var hdgCur=hdgEl.querySelector('.cursor');
+  var hdgIdx=0;
+  delay(function(){
+    var ti=setInterval(function(){
+      hdgEl.insertBefore(document.createTextNode(HDG_TXT[hdgIdx]),hdgCur);
+      hdgIdx++;
+      if(hdgIdx>=HDG_TXT.length){
+        clearInterval(ti);
+        setTimeout(function(){hdgCur.style.display='none';},700);
+      }
+    },HDG_MS);
+  },hdgStart);
+
+  // Fase 2: logo aparece después del encabezado
+  delay(function(){
+    show('intro-logo');
+    show('intro-glow');
+  },logoShow);
+
+  // Fase 3: typewriter del subtítulo
+  var subEl=document.getElementById('intro-sub');
+  var subCur=subEl.querySelector('.cursor');
+  var subIdx=0;
+  delay(function(){
+    var ti=setInterval(function(){
+      subEl.insertBefore(document.createTextNode(SUB_TXT[subIdx]),subCur);
+      subIdx++;
+      if(subIdx>=SUB_TXT.length){
+        clearInterval(ti);
+        setTimeout(function(){subCur.style.display='none';},700);
+      }
+    },SUB_MS);
+  },subStart);
+
+  // Fade out → main
+  delay(function(){
+    _stopIntro=true;
+    document.getElementById('intro').classList.add('out');
+    delay(startMain,850);
+  },fadeAt);
+}
+
+// ════════════════════════════════
+// WHATSAPP
+// ════════════════════════════════
+document.getElementById('btn-wa').addEventListener('click',function(e){
+  e.preventDefault();
+  var url=location.href.split('?')[0];
+  var t=encodeURIComponent(
+    '🎓 *CEREMONIA DE GRADUACIÓN*\n'+
+    '*XXII Generación de Bachillerato*\n'+
+    'Colegio Mano Amiga Chalco\n\n'+
+    '📅 17 de Julio, 2025 · 🕘 9:45 a.m.\n'+
+    '🏛️ Auditorio Colegio Mano Amiga Chalco\n\n'+
+    '"No hay excusa alguna para no servir a los demás" — H.K.N.\n\n'+
+    '🔗 '+url
+  );
+  open('https://wa.me/?text='+t,'_blank');
+});
+
+addEventListener('resize',function(){
+  var c=document.getElementById('cv-confetti');
+  c.width=innerWidth;c.height=innerHeight;
+});
+
+runIntro();
+</script>
+</body>
+</html>

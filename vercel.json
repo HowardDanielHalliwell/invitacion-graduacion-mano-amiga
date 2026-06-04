@@ -1,0 +1,3 @@
+{
+  "rewrites": [{ "source": "/(.*)", "destination": "/invitacion-graduacion-mano-amiga.html" }]
+}
