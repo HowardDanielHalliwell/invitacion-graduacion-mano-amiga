@@ -973,26 +973,15 @@ window.addEventListener('load', function() {
 </script>
 <script>
 function compartirWhatsApp() {
-  const graduacion = '🎓';
-  const fecha     = '📅';
-  const hora      = '🕙';
-  const pin       = '📍';
-  const mapa      = '🗺';
-  const brillo    = '✨';
-
-  const mensaje = graduacion + ' *CEREMONIA DE GRADUACIÓN* ' + graduacion + '\n' +
-'*XXII Generación de Bachillerato*\n' +
-'Colegio Mano Amiga Chalco\n\n' +
-fecha  + ' *Fecha:* 17 de Julio 2026\n' +
-hora   + ' *Hora:* 9:45 a.m.\n' +
-pin    + ' *Lugar:* Auditorio del Colegio\n' +
-'Av. Cuauhtémoc MZ 1844 - Lote 2\n' +
-'Col. Concepción, Xico, Méx. 56615\n\n' +
-mapa   + ' *Mapa:* https://maps.app.goo.gl/z5i5deGXQhGKLmnG9\n\n' +
-brillo + ' *Ver invitación:* https://invitacion-graduacion-mano-amiga.vercel.app';
-
-  const url = 'https://wa.me/?text=' + encodeURIComponent(mensaje);
-  window.open(url, '_blank');
+  if (navigator.share) {
+    navigator.share({
+      title: 'Ceremonia de Graduación - Mano Amiga Chalco',
+      text: '🎓 XXII Generación de Bachillerato\nColegio Mano Amiga Chalco\n17 de Julio 2026 · 9:45 a.m.',
+      url: 'https://invitacion-graduacion-mano-amiga.vercel.app'
+    });
+  } else {
+    window.open('https://wa.me/?text=' + encodeURIComponent('🎓 *CEREMONIA DE GRADUACIÓN* 🎓\n*XXII Generación de Bachillerato*\nColegio Mano Amiga Chalco\n\n📅 17 de Julio 2026 · 🕙 9:45 a.m.\n📍 Auditorio del Colegio, Xico, Méx.\n\n🗺 https://maps.app.goo.gl/z5i5deGXQhGKLmnG9\n\n✨ Ver invitación: https://invitacion-graduacion-mano-amiga.vercel.app'), '_blank');
+  }
 }
 </script>
 </body>
