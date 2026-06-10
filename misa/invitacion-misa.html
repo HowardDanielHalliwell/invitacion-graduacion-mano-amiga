@@ -460,14 +460,24 @@ window.addEventListener('load', function(){
 
 // ── Compartir ─────────────────────────────────────────
 function compartirMisa(){
-  const texto = 'Tenemos el honor de invitarte a nuestra Misa de Fin de Cursos\nColegio Mano Amiga Chalco\n\nFecha: 3 de Julio 2026\nHora: 11:00 a.m.\nLugar: Catedral San Juan Diego\nAv. Alfredo del Mazo Esq. Tezozómoc, Xico, Méx.\n\nMapa: https://maps.app.goo.gl/STc9iKLNTyhd79rh8';
+  const mensaje = `Tenemos el honor de invitarte a nuestra Misa de Fin de Cursos
+Colegio Mano Amiga Chalco
+
+Fecha: 3 de Julio 2026
+Hora: 11:00 a.m.
+Lugar: Catedral San Juan Diego
+Av. Alfredo del Mazo Esq. Tezozómoc, Xico, Méx.
+
+Mapa: https://maps.app.goo.gl/STc9iKLNTyhd79rh8
+
+Ver invitación: https://invitacion-misa-mano-amiga.vercel.app`;
   if(navigator.share){
     navigator.share({
       title:'Misa de Fin de Cursos — Mano Amiga Chalco',
-      text: texto
+      text: mensaje
     });
   } else {
-    window.open('https://wa.me/?text='+encodeURIComponent(texto),'_blank');
+    window.open('https://wa.me/?text='+encodeURIComponent(mensaje),'_blank');
   }
 }
 </script>
