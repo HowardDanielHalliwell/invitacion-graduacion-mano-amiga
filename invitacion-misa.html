@@ -35,111 +35,18 @@ html,body{
 /* ══════════════════════════════════════════════════
    ENVELOPE SCENE
 ══════════════════════════════════════════════════ */
-#envelope-scene{
+/* ── Destello al aterrizar ── */
+#destello{
   position:fixed;inset:0;
-  display:flex;align-items:center;justify-content:center;
-  z-index:100;
-  opacity:0;
-  animation:envAppear .5s ease .2s forwards;
-}
-@keyframes envAppear{to{opacity:1;}}
-#envelope-scene.hide{
-  animation:envHide .65s ease forwards;
   pointer-events:none;
-}
-@keyframes envHide{to{opacity:0;}}
-
-/* Envelope container */
-.env-wrap{
-  position:relative;
-  width:min(420px,90vw);
-  height:min(290px,64vw);
-  filter:drop-shadow(0 18px 48px rgba(201,168,76,.38));
-}
-
-/* Envelope body */
-.env-body{
-  position:absolute;inset:0;
-  background:#FFFDF8;
-  border:2px solid var(--gold);
-  overflow:hidden;
-}
-/* Diagonal fold lines inside envelope body */
-.env-body::before{
-  content:'';
-  position:absolute;inset:0;
-  background:
-    linear-gradient(135deg,transparent 49.4%,rgba(201,168,76,.13) 49.4%,rgba(201,168,76,.13) 50.6%,transparent 50.6%),
-    linear-gradient(225deg,transparent 49.4%,rgba(201,168,76,.13) 49.4%,rgba(201,168,76,.13) 50.6%,transparent 50.6%);
-}
-
-/* Card peeking out from inside */
-.card-peek{
-  position:absolute;
-  bottom:6px;left:50%;
-  transform:translateX(-50%) translateY(4px);
-  width:83%;height:80%;
-  background:#FFFFFF;
-  border:1px solid rgba(201,168,76,.35);
-  display:flex;align-items:center;justify-content:center;
+  z-index:50;
   opacity:0;
-  transition:opacity .5s ease, transform .85s cubic-bezier(.18,.89,.32,1.2);
-  z-index:3;
-  box-shadow:0 2px 14px rgba(0,0,0,.07);
+  background:radial-gradient(ellipse at center,
+    rgba(232,201,122,.55) 0%,
+    rgba(201,168,76,.25) 40%,
+    transparent 70%);
+  filter:blur(20px);
 }
-.card-peek.rising{
-  opacity:1;
-  transform:translateX(-50%) translateY(-30%);
-}
-.card-peek-inner{
-  text-align:center;padding:14px;
-}
-.peek-cross{
-  font-size:22px;color:var(--gold);display:block;margin-bottom:5px;
-}
-.peek-title{
-  font-family:'Great Vibes',cursive;
-  font-size:16px;color:var(--ink);
-}
-.peek-sub{
-  font-family:'Montserrat',sans-serif;
-  font-size:7px;letter-spacing:2.5px;color:var(--gold);
-  text-transform:uppercase;margin-top:4px;
-}
-
-/* Envelope flap (triangle) */
-.env-flap{
-  position:absolute;
-  top:0;left:0;
-  width:100%;
-  height:52%;
-  background:linear-gradient(165deg,#FAF7F0 0%,#F2EDE0 100%);
-  clip-path:polygon(0 0, 100% 0, 50% 88%);
-  transform-origin:top center;
-  transition:transform .72s cubic-bezier(.4,0,.2,1), opacity .3s ease .4s;
-  z-index:10;
-}
-.env-flap::before{
-  content:'';
-  position:absolute;top:0;left:0;right:0;
-  height:2px;
-  background:var(--gold);
-}
-.env-flap.open{
-  transform:perspective(700px) rotateX(-180deg);
-  opacity:0;
-}
-
-/* Seal on flap */
-.env-seal{
-  position:absolute;
-  bottom:-28px;left:50%;
-  transform:translateX(-50%);
-  width:56px;height:56px;
-  z-index:11;
-  transition:opacity .25s;
-}
-.env-flap.open .env-seal{opacity:0;}
 
 /* ══════════════════════════════════════════════════
    FULL CARD
@@ -149,15 +56,6 @@ html,body{
   min-height:100vh;
   display:flex;flex-direction:column;align-items:center;
   padding:48px 0 60px;
-  opacity:0;
-  transform:scale(.93) translateY(12px);
-  transition:opacity .7s ease, transform .7s ease;
-  pointer-events:none;
-}
-#full-card.visible{
-  opacity:1;
-  transform:scale(1) translateY(0);
-  pointer-events:auto;
 }
 
 .card-outer{
@@ -387,38 +285,8 @@ html,body{
 
 <canvas id="bg-cv"></canvas>
 
-<!-- ═══ SOBRE ═══ -->
-<div id="envelope-scene">
-  <div class="env-wrap">
-
-    <!-- Cuerpo del sobre -->
-    <div class="env-body"></div>
-
-    <!-- Tarjeta que emerge -->
-    <div class="card-peek" id="card-peek">
-      <div class="card-peek-inner">
-        <span class="peek-cross">✝</span>
-        <div class="peek-title">Misa de Fin de Cursos</div>
-        <div class="peek-sub">Mano Amiga Chalco · 2026</div>
-      </div>
-    </div>
-
-    <!-- Solapa animada -->
-    <div class="env-flap" id="env-flap">
-      <div class="env-seal">
-        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="30" cy="30" r="27" fill="#FAF5EC" stroke="#C9A84C" stroke-width="1.5"/>
-          <circle cx="30" cy="30" r="21" fill="none" stroke="#C9A84C" stroke-width=".7" stroke-dasharray="2.5,2.5"/>
-          <line x1="30" y1="12" x2="30" y2="48" stroke="#C9A84C" stroke-width="1.5"/>
-          <line x1="13" y1="25" x2="47" y2="25" stroke="#C9A84C" stroke-width="1.5"/>
-          <text x="30" y="43" font-family="Montserrat,sans-serif" font-size="7" font-weight="600"
-                fill="#C9A84C" text-anchor="middle" letter-spacing="1.5">MA</text>
-        </svg>
-      </div>
-    </div>
-
-  </div>
-</div>
+<!-- ═══ DESTELLO ═══ -->
+<div id="destello"></div>
 
 <!-- ═══ TARJETA COMPLETA ═══ -->
 <div id="full-card">
@@ -555,25 +423,95 @@ html,body{
   })();
 })();
 
-// ── Secuencia de animación del sobre ────────────────
+// ── Carta que cae del cielo ──────────────────────────
 (function(){
-  const scene = document.getElementById('envelope-scene');
-  const flap  = document.getElementById('env-flap');
-  const peek  = document.getElementById('card-peek');
-  const card  = document.getElementById('full-card');
+  const card     = document.getElementById('full-card');
+  const destello = document.getElementById('destello');
 
-  // Fase 2: solapa se abre (1s)
-  setTimeout(()=>{ flap.classList.add('open'); }, 1000);
+  // easing helpers
+  function easeOutBounce(t){
+    if(t < 1/2.75)  return 7.5625*t*t;
+    if(t < 2/2.75)  return 7.5625*(t-=1.5/2.75)*t+0.75;
+    if(t < 2.5/2.75)return 7.5625*(t-=2.25/2.75)*t+0.9375;
+    return 7.5625*(t-=2.625/2.75)*t+0.984375;
+  }
+  function easeOut(t){ return 1-(1-t)*(1-t); }
+  function lerp(a,b,t){ return a+(b-a)*t; }
 
-  // Fase 3: tarjeta sube (1.8s)
-  setTimeout(()=>{ peek.classList.add('rising'); }, 1800);
+  // Estado inicial — tarjeta invisible fuera de pantalla
+  card.style.opacity   = '0';
+  card.style.transform = 'translateY(-120vh) rotate(-8deg)';
+  card.style.transition= 'none';
+  card.style.pointerEvents = 'none';
 
-  // Fase 4: sobre desaparece, tarjeta completa (2.8s)
-  setTimeout(()=>{
-    scene.classList.add('hide');
-    card.classList.add('visible');
-    setTimeout(()=>{ scene.style.display='none'; }, 700);
-  }, 2800);
+  // ── FASE 2: caída (300ms → 1800ms, duración 1500ms) ──
+  const FALL_START = 300;
+  const FALL_DUR   = 1500;
+  let fallRaf;
+
+  function startFall(){
+    const t0 = performance.now();
+    function step(now){
+      let p = Math.min((now - t0) / FALL_DUR, 1);
+      const pe  = easeOut(p);
+      const ty  = lerp(-120, 20, pe);          // vh: -120 → +20 (overshoot)
+      const rot = lerp(-8, 2, pe);             // deg: -8 → 2
+      const op  = p < 0.3 ? p/0.3 : 1;        // opacity al 30% del recorrido
+      card.style.transform = `translateY(${ty}vh) rotate(${rot}deg)`;
+      card.style.opacity   = op;
+      if(p < 1){ fallRaf = requestAnimationFrame(step); }
+      else      { startBounce(); }
+    }
+    fallRaf = requestAnimationFrame(step);
+  }
+
+  // ── FASE 3: rebote (1800ms → 2100ms, duración 300ms) ──
+  function startBounce(){
+    // Destello
+    destello.style.transition = 'opacity 0.15s ease';
+    destello.style.opacity = '0.6';
+    setTimeout(()=>{
+      destello.style.transition = 'opacity 0.25s ease';
+      destello.style.opacity = '0';
+    }, 150);
+
+    const t0 = performance.now();
+    const DUR = 300;
+    function step(now){
+      let p  = Math.min((now - t0) / DUR, 1);
+      const eb = easeOutBounce(p);
+      // ty: 20 → -8 → 0  usando bounce
+      const ty  = lerp(20, 0, eb);
+      const rot = lerp(2, 0, eb);
+      card.style.transform = `translateY(${ty}px) rotate(${rot}deg)`;
+      if(p < 1){ requestAnimationFrame(step); }
+      else      { onLanded(); }
+    }
+    requestAnimationFrame(step);
+  }
+
+  // ── FASE 4: tarjeta en posición, fadeUp stagger ──
+  function onLanded(){
+    card.style.transform = 'translateY(0) rotate(0deg)';
+    card.style.pointerEvents = 'auto';
+    // fadeUp stagger en secciones internas
+    const secciones = card.querySelectorAll(
+      '.card-logo, .orn-line, .inv-label, .title-misa, .title-fin, ' +
+      '.school-label, .quote-wrap, .cd-wrap, .ev-cols, .sig-wrap, .wa-wrap'
+    );
+    secciones.forEach((el, i)=>{
+      el.style.opacity   = '0';
+      el.style.transform = 'translateY(18px)';
+      el.style.transition= 'none';
+      setTimeout(()=>{
+        el.style.transition = 'opacity .45s ease, transform .45s ease';
+        el.style.opacity    = '1';
+        el.style.transform  = 'translateY(0)';
+      }, i * 100);
+    });
+  }
+
+  setTimeout(startFall, FALL_START);
 })();
 
 // ── Cuenta regresiva ─────────────────────────────────
