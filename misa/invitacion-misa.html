@@ -349,8 +349,8 @@ html,body{
           <div class="ev-divider"></div>
           <div class="ev-col">
             <span class="ev-label">Hora</span>
-            <span class="ev-time">11:00</span>
-            <span class="ev-am">A.M.</span>
+            <span class="ev-time">1:00</span>
+            <span class="ev-am">P.M.</span>
           </div>
         </div>
 
@@ -443,7 +443,7 @@ html,body{
 // ── Cuenta regresiva ─────────────────────────────────
 window.addEventListener('load', function(){
   function tick(){
-    const target = new Date('2026-07-03T11:00:00');
+    const target = new Date('2026-07-03T13:00:00');
     const diff   = target - new Date();
     if(diff <= 0){
       document.getElementById('cd-d').textContent = '¡Hoy!';
@@ -464,7 +464,7 @@ function compartirMisa(){
 Colegio Mano Amiga Chalco
 
 Fecha: 3 de Julio 2026
-Hora: 11:00 a.m.
+Hora: 1:00 p.m.
 Lugar: Catedral San Juan Diego
 Av. Alfredo del Mazo Esq. Tezozómoc, Xico, Méx.
 
